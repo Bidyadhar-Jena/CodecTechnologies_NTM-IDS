@@ -445,9 +445,3 @@ To add your verified profiles, edit this section with your own profile URLs:
 Replace the placeholders with your actual profile links before publishing. Do not include private contact information unless you intentionally want it public.
 
 ---
-
-## 📄 License
-
-No license is specified by this README. Before publishing, choose a license if you want others to have explicit permission to use, modify, and redistribute the code. For example, you can add an MIT License by creating a `LICENSE` file containing the appropriate license text and your chosen copyright notice.
-
-Until a license is added, do not assume that the repository is open-source licensed.

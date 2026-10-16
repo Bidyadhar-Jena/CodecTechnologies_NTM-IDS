@@ -1,0 +1,1 @@
+If you want Git to preserve the logs folder, create an empty file named .gitkeep inside logs/.

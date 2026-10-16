@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SENTINEL SOC | Network Security</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <img
+                    src="{{ url_for('static', filename='sentinel-logo.png') }}"
+                    alt="SENTINEL Logo">
+            </div>
+
+            <div class="brand-text">
+                <h2>SENTINEL</h2>
+                <span>SECURITY OPERATIONS</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">WORKSPACE</div>
+
+        <nav class="navigation">
+            <a href="#overview" class="nav-link active">
+                <span>▦</span> Overview
+            </a>
+
+            <a href="#traffic-section" class="nav-link">
+                <span>⇄</span> Network Traffic
+            </a>
+
+            <a href="#alerts-section" class="nav-link">
+                <span>⚠</span> Threat Alerts
+            </a>
+
+            <a href="#history-section" class="nav-link">
+                <span>▤</span> Alert History
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="connection-indicator"></div>
+
+            <div>
+                <strong>Monitoring System</strong>
+                <p id="sidebar-status">Checking connection...</p>
+            </div>
+
+            <div class="footer-details">
+                <p>Network IDS v1.0</p>
+                <p>Educational Security Prototype</p>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- PAGE HEADER -->
+        <header class="page-header">
+
+            <div>
+                <span class="eyebrow">SECURITY OPERATIONS CENTER</span>
+
+                <h1>Network Security Dashboard</h1>
+
+                <p class="page-description">
+                    Real-time traffic monitoring and ML-based anomaly detection
+                </p>
+            </div>
+
+            <div class="header-right">
+                <div class="monitor-badge">
+                    <span class="status-dot"></span>
+                    <span id="monitor-status">CONNECTING</span>
+                </div>
+
+                <div id="clock" class="clock">--:--:--</div>
+            </div>
+
+        </header>
+
+
+        <!-- OVERVIEW -->
+        <section id="overview" class="dashboard-section">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Security Overview</h2>
+                    <p>Current monitoring statistics</p>
+                </div>
+
+                <span class="updated-label">
+                    UPDATED <span id="last-updated">--:--:--</span>
+                </span>
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="stats-grid">
+
+                <article class="stat-card packets-card">
+                    <div class="stat-top">
+                        <span>CAPTURED PACKETS</span>
+                        <span class="stat-icon blue">⇄</span>
+                    </div>
+
+                    <h3 id="packet-count">0</h3>
+
+                    <p>Packets currently in memory</p>
+                </article>
+
+
+                <article class="stat-card alerts-card">
+                    <div class="stat-top">
+                        <span>ACTIVE ALERTS</span>
+                        <span class="stat-icon orange">⚠</span>
+                    </div>
+
+                    <h3 id="active-alert-count">0</h3>
+
+                    <p>Recent in-memory alerts</p>
+                </article>
+
+
+                <article class="stat-card stored-card">
+                    <div class="stat-top">
+                        <span>STORED ALERTS</span>
+                        <span class="stat-icon purple">▤</span>
+                    </div>
+
+                    <h3 id="stored-alert-count">0</h3>
+
+                    <p>Alerts saved in SQLite</p>
+                </article>
+
+
+                <article class="stat-card status-card">
+                    <div class="stat-top">
+                        <span>MONITOR STATUS</span>
+                        <span class="stat-icon green">●</span>
+                    </div>
+
+                    <h3 id="connection-status">CONNECTING</h3>
+
+                    <p>API connectivity status</p>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- NETWORK TRAFFIC -->
+        <section id="traffic-section" class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h2>Live Network Traffic</h2>
+                    <p>Most recently captured IPv4 packets</p>
+                </div>
+
+                <span class="record-badge">100 RECORDS MAX</span>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>SOURCE IP</th>
+                            <th>DESTINATION IP</th>
+                            <th>PROTOCOL</th>
+                            <th>DEST. PORT</th>
+                            <th>SIZE</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="traffic-table">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                Waiting for network traffic...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="panel-footer">
+                <span id="traffic-footer">Waiting for packet data</span>
+                <span class="live-indicator">
+                    <span class="status-dot"></span> LIVE UPDATES
+                </span>
+            </div>
+
+        </section>
+
+
+        <!-- THREAT ALERTS -->
+        <section id="alerts-section" class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h2>Potential Threat Alerts</h2>
+                    <p>Recent anomaly detection results</p>
+                </div>
+
+                <span class="record-badge">LIVE ALERTS</span>
+            </div>
+
+            <div id="alerts-container" class="alerts-container">
+
+                <div class="empty-state">
+                    No alerts received yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ALERT HISTORY -->
+        <section id="history-section" class="panel">
+
+            <div class="panel-header">
+                <div>
+                    <h2>Alert History</h2>
+                    <p>Previously stored security events</p>
+                </div>
+
+                <span class="record-badge">SQLITE DATABASE</span>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>ALERT TYPE</th>
+                            <th>SOURCE IP</th>
+                            <th>DESTINATION IP</th>
+                            <th>SEVERITY</th>
+                            <th>MESSAGE</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="history-table">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                Loading alert history...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- DISCLAIMER -->
+        <footer class="main-footer">
+            <p>
+                SENTINEL Network IDS · Educational Prototype
+            </p>
+
+            <p>
+                Anomaly alerts are experimental and do not confirm an attack.
+            </p>
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script>
+    const $ = (id) => document.getElementById(id);
+
+
+    // Safely display API data as text.
+    function addCell(row, value) {
+        const cell = document.createElement("td");
+        cell.textContent =
+            value === null || value === undefined || value === ""
+                ? "—"
+                : String(value);
+
+        row.appendChild(cell);
+        return cell;
+    }
+
+
+    function formatTime(value) {
+        if (!value) return "—";
+        return String(value);
+    }
+
+
+    function setEmptyRow(element, columns, message) {
+        element.replaceChildren();
+
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = columns;
+        cell.className = "empty-state";
+        cell.textContent = message;
+
+        row.appendChild(cell);
+        element.appendChild(row);
+    }
+
+
+    function renderTraffic(packets) {
+        const table = $("traffic-table");
+        table.replaceChildren();
+
+        if (!packets.length) {
+            setEmptyRow(
+                table,
+                6,
+                "No packets captured yet. Waiting for traffic..."
+            );
+
+            $("traffic-footer").textContent = "No packet data available";
+            return;
+        }
+
+        packets.slice(-100).reverse().forEach(packet => {
+            const row = document.createElement("tr");
+
+            addCell(row, formatTime(packet.time));
+            addCell(row, packet.source_ip);
+            addCell(row, packet.destination_ip);
+
+            const protocolCell = addCell(row, packet.protocol);
+            protocolCell.className = "protocol-cell";
+
+            addCell(row, packet.destination_port);
+            addCell(row, packet.size ? `${packet.size} B` : "—");
+
+            table.appendChild(row);
+        });
+
+        $("traffic-footer").textContent =
+            `${packets.length} packets available in memory`;
+    }
+
+
+    function renderAlerts(alertList) {
+        const container = $("alerts-container");
+        container.replaceChildren();
+
+        if (!alertList.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+            empty.textContent = "No alerts received yet.";
+
+            container.appendChild(empty);
+            return;
+        }
+
+        alertList.slice(0, 50).forEach(alert => {
+            const card = document.createElement("article");
+            card.className = "alert-item";
+
+            const icon = document.createElement("div");
+            icon.className = "alert-symbol";
+            icon.textContent = "⚠";
+
+            const content = document.createElement("div");
+            content.className = "alert-content";
+
+            const title = document.createElement("h3");
+            title.textContent = alert.type || "Security Alert";
+
+            const message = document.createElement("p");
+            message.textContent = alert.message || "No details available.";
+
+            const metadata = document.createElement("div");
+            metadata.className = "alert-metadata";
+            metadata.textContent =
+                `${alert.time || "Unknown time"} · ` +
+                `Source: ${alert.source_ip || "Unknown"} · ` +
+                `Destination: ${alert.destination_ip || "Unknown"}`;
+
+            const severity = document.createElement("span");
+            severity.className =
+                "severity-badge " +
+                String(alert.severity || "INFO").toLowerCase();
+
+            severity.textContent = alert.severity || "INFO";
+
+            content.append(title, message, metadata);
+            card.append(icon, content, severity);
+
+            container.appendChild(card);
+        });
+    }
+
+
+    function renderHistory(history) {
+        const table = $("history-table");
+        table.replaceChildren();
+
+        if (!history.length) {
+            setEmptyRow(table, 6, "No stored alerts found.");
+            return;
+        }
+
+        history.forEach(alert => {
+            const row = document.createElement("tr");
+
+            addCell(row, alert.timestamp || alert.time);
+            addCell(row, alert.alert_type || alert.type);
+            addCell(row, alert.source_ip);
+            addCell(row, alert.destination_ip);
+
+            const severity = addCell(row, alert.severity);
+            severity.className = "severity-cell";
+
+            addCell(row, alert.message);
+
+            table.appendChild(row);
+        });
+    }
+
+
+    async function fetchJSON(url) {
+        const response = await fetch(url, { cache: "no-store" });
+
+        if (!response.ok) {
+            throw new Error(`Request failed: ${url}`);
+        }
+
+        return response.json();
+    }
+
+
+    async function updateDashboard() {
+        try {
+            const [traffic, alerts, history, stats] = await Promise.all([
+                fetchJSON("/api/traffic"),
+                fetchJSON("/api/alerts"),
+                fetchJSON("/api/alerts/history"),
+                fetchJSON("/api/stats")
+            ]);
+
+            if (!Array.isArray(traffic) ||
+                !Array.isArray(alerts) ||
+                !Array.isArray(history)) {
+                throw new Error("Unexpected API response.");
+            }
+
+            renderTraffic(traffic);
+            renderAlerts(alerts);
+            renderHistory(history);
+
+            $("packet-count").textContent =
+                stats.traffic_packets ?? traffic.length;
+
+            $("active-alert-count").textContent =
+                stats.live_alerts ?? alerts.length;
+
+            $("stored-alert-count").textContent =
+                stats.stored_alerts ?? history.length;
+
+            $("monitor-status").textContent = "API CONNECTED";
+            $("connection-status").textContent = "CONNECTED";
+            $("sidebar-status").textContent = "API connected";
+
+            $("last-updated").textContent =
+                new Date().toLocaleTimeString();
+
+        } catch (error) {
+            $("monitor-status").textContent = "API ERROR";
+            $("connection-status").textContent = "OFFLINE";
+            $("sidebar-status").textContent = "API unavailable";
+
+            console.error("Dashboard update failed:", error);
+        }
+    }
+
+
+    function updateClock() {
+        $("clock").textContent =
+            new Date().toLocaleTimeString();
+    }
+
+
+    // Sidebar navigation highlighting.
+    document.querySelectorAll(".nav-link").forEach(link => {
+        link.addEventListener("click", () => {
+            document.querySelectorAll(".nav-link")
+                .forEach(item => item.classList.remove("active"));
+
+            link.classList.add("active");
+        });
+    });
+
+
+    updateClock();
+    updateDashboard();
+
+    setInterval(updateClock, 1000);
+    setInterval(updateDashboard, 3000);
+</script>
+
+</body>
+</html>

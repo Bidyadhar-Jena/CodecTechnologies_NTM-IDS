@@ -439,8 +439,8 @@ Project: **SENTINEL — Network Traffic Monitoring & Intrusion Detection System 
 
 To add your verified profiles, edit this section with your own profile URLs:
 
-- GitHub: `https://github.com/YOUR-GITHUB-USERNAME`
-- LinkedIn: `https://www.linkedin.com/in/YOUR-LINKEDIN-SLUG/`
+- GitHub: `https://github.com/Bidyadhar-Jena`
+- LinkedIn: `https://www.linkedin.com/in/bidyadhar-jena-919593379`
 
 Replace the placeholders with your actual profile links before publishing. Do not include private contact information unless you intentionally want it public.
 
